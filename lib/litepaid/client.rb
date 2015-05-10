@@ -2,6 +2,12 @@ require 'uri'
 require 'json'
 require 'rest_client'
 
+require 'litepaid/models/base'
+require 'litepaid/models/payment'
+require 'litepaid/models/refund'
+require 'litepaid/payments'
+require 'litepaid/refunds'
+
 module Litepaid
   class Client
     API_URL = 'https://www.litepaid.com/api'
@@ -10,6 +16,8 @@ module Litepaid
       live: 0,
       test: 1
     }.freeze
+
+    attr_reader :payments, :refunds
 
     # required: key
     # optional: mode, version
@@ -28,59 +36,11 @@ module Litepaid
       @api_version  = options.delete(:version) || 2         
           
       @options  = options.freeze
+
+      @payments = Litepaid::Payments.new self
+      @refunds = Litepaid::Refunds.new self
+
     end
-
-    # required: id
-    def check_payment(options)
-      ensure_valid_attributes options
-      ensure_presence_of_attributes %w(id), options
-      response = make_request('check-invoice-status', options)
-      data = response[:data]
-
-      { 
-        code: data[:code] || data[:error_code], 
-        message: data[:description] || data[:error_name], 
-        status: response[:result] == 'success' ? :ok : :unprocessable_entity 
-      }
-    end       
-
-    # required: value, return_url
-    # optional: cancel_url, currency, webhook_url, description
-    def create_payment(options)
-      ensure_valid_attributes options
-      ensure_presence_of_attributes %w(value return_url), options
-      response = make_request('create-invoice', options)
-
-      data = response[:data]
-      code = data[:code] || data[:error_code]
-      message = data[:description] || data[:error_name]
-
-      if response[:result] == 'success'       
-        token = data[:invoice_token]
-        payment_url = "#{INVOICE_URL}/id:#{token}"
-        { token: token, payment_url: payment_url, code: code, message: message, status: :ok }
-      else
-        { code: code, message: message, status: :unprocessable_entity }
-      end
-    end
-
-    # required: id, address
-    def refund_payment(options)
-      ensure_valid_attributes options
-      ensure_presence_of_attributes %w(id address), options
-      response = make_request('refund', options)
-
-      data = response[:data]
-
-      { 
-        code: data[:code] || data[:error_code], 
-        message: data[:description] || data[:error_name], 
-        status: response[:result] == 'success' ? :ok : :unprocessable_entity 
-      }     
-    end
-
-
-    private
 
     def ensure_presence_of_attributes(keys, attributes)
       raise ArgumentError, 'Options Hash is expected' if attributes.nil?
@@ -162,9 +122,22 @@ module Litepaid
         key: @options[:key],
         test: API_MODES.fetch(:"#{@options[:mode]}")
       }).freeze
-      response = JSON.parse RestClient.get( get_resource_url(resource_name), { params: options } )
+      
+      begin
+        response = JSON.parse RestClient.get( get_resource_url(resource_name), { params: options } ), symbolize_names: true
+      rescue RestClient::ExceptionWithResponse => e
+        response = JSON.parse e.response, symbolize_names: true
+      end
 
-      response.with_indifferent_access
+      data = response[:data]
+      data[:code] = data.delete(:code) || data.delete(:error_code)
+      data[:message] = data.delete(:description) || data.delete(:error_name)
+
+      if response[:result] == 'error'
+        raise Litepaid::Exception.new data[:message], :unprocessable_entity, data[:code]
+      end
+
+      data
     end       
 
   end

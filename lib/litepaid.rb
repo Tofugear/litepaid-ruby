@@ -1,2 +1,3 @@
-require "litepaid/version"
-require "litepaid/client"
+require 'litepaid/client'
+require 'litepaid/exception'
+require 'litepaid/version'
