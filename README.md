@@ -2,6 +2,8 @@
 
 Accept Bitcoin, Litecoin, Dogecoin, DigiBytes and more through the LitePaid service - a fast and easy way to accept digital currencies.
 
+Before you use this Gem you must create a [LitePaid](https://litepaid.com/) account and setup a Website Profile to obtain your API key.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -26,7 +28,7 @@ Require the LitePaid API Client:
 require 'litepaid'
 ```
 
-Initialize the LitePaid API Client and set the API key:
+Initialize the LitePaid API Client with your API key:
 
 ```ruby
 litepaid = Litepaid::Client.new("628fe07656a3ab97eaed93e799d4c64118913248814adbeb92f07abc3752de00")
