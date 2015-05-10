@@ -1,15 +1,13 @@
-# Litepaid::Ruby
+# LitePaid API Client for Ruby
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/litepaid/ruby`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Accept Bitcoin, Litecoin, Dogecoin, DigiBytes and more through the LitePaid service - a fast and easy way to accept digital currencies.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'litepaid-ruby'
+gem 'litepaid'
 ```
 
 And then execute:
@@ -18,11 +16,32 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install litepaid-ruby
+    $ gem install litepaid
 
 ## Usage
 
-TODO: Write usage instructions here
+Require the LitePaid API Client:
+
+```ruby
+require 'litepaid'
+```
+
+Initialize the LitePaid API Client and set the API key:
+
+```ruby
+litepaid = Litepaid::Client.new("628fe07656a3ab97eaed93e799d4c64118913248814adbeb92f07abc3752de00")
+```
+
+Create a Payment:
+
+```ruby
+response = litepaid.create_payment(
+	value: 10.0,
+	description: 'My Test Payment',
+	currency: 'usd',
+	return_url: 'https://shop.mysite.com/payment/result'
+)
+```
 
 ## Development
 

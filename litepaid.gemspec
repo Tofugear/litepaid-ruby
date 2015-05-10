@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["info@tofugear.com"]
 
   spec.summary       = %q{Litepaid API Client for Ruby}
-  spec.description   = %q{Accepting Bitcoin, Litecoin, Dogecoin, DigiBytes and more through the LitePaid service - a fast and easy way to accept digital currencies.}
+  spec.description   = %q{Accept Bitcoin, Litecoin, Dogecoin, DigiBytes and more through the LitePaid service - a fast and easy way to accept digital currencies.}
   spec.homepage      = "https://github.com/caphun/litepaid-ruby"
   spec.license       = "MIT"
 
