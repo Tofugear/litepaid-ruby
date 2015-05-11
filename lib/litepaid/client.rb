@@ -25,18 +25,16 @@ module Litepaid
 
       options = options.clone
       if options.kind_of?(String)
-        { key: options }
+        options = { key: options }
       end
 
       ensure_valid_attributes options
       ensure_presence_of_attributes %w(key), options
 
       options[:mode] = (options.delete(:mode) || 'live').downcase
-
       @api_version  = options.delete(:version) || 2         
-          
+      
       @options  = options.freeze
-
       @payments = Litepaid::Payments.new self
       @refunds = Litepaid::Refunds.new self
 
@@ -45,12 +43,9 @@ module Litepaid
     def ensure_presence_of_attributes(keys, attributes)
       raise ArgumentError, 'Options Hash is expected' if attributes.nil?
 
-      attributes = attributes.with_indifferent_access
-
       keys.each do |key|
-        unless attributes.has_key?(key) && attributes[key].present?
-          raise ArgumentError, ":#{key} not found or is empty"
-        end
+        sym = key.to_sym
+        raise ArgumentError, "#{key} not found or is empty" unless attributes.include?(sym)
       end
     end
 

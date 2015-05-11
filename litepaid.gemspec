@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Litepaid API Client for Ruby}
   spec.description   = %q{Accept Bitcoin, Litecoin, Dogecoin, DigiBytes and more through the LitePaid service - a fast and easy way to accept digital currencies.}
-  spec.homepage      = "https://github.com/caphun/litepaid-ruby"
+  spec.homepage      = "https://github.com/tofugear/litepaid-ruby"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }

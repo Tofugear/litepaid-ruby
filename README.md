@@ -37,12 +37,18 @@ litepaid = Litepaid::Client.new("628fe07656a3ab97eaed93e799d4c64118913248814adbe
 Create a Payment:
 
 ```ruby
-response = litepaid.create_payment(
+payment = litepaid.payments.create(
 	value: 10.0,
 	description: 'My Test Payment',
 	currency: 'usd',
 	return_url: 'https://shop.mysite.com/payment/result'
 )
+```
+
+Check payment status:
+
+```ruby
+payment = litepaid.payments.get('2521c073c096921cebfe')
 ```
 
 ## Development
@@ -53,7 +59,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/litepaid-ruby/fork )
+1. Fork it ( https://github.com/tofugear/litepaid-ruby/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
