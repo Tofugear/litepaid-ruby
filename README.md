@@ -38,10 +38,10 @@ Create a Payment:
 
 ```ruby
 payment = litepaid.payments.create(
-	value: 10.0,
-	description: 'My Test Payment',
-	currency: 'usd',
-	return_url: 'https://shop.mysite.com/payment/result'
+  value: 10.0,
+  description: 'My Test Payment',
+  currency: 'usd',
+  return_url: 'https://shop.mysite.com/payment/result'
 )
 ```
 
@@ -49,6 +49,15 @@ Check payment status:
 
 ```ruby
 payment = litepaid.payments.get('2521c073c096921cebfe')
+```
+
+Refund a payment:
+
+``` ruby
+refund = litepaid.refunds.create(
+  id: '2521c073c096921cebfe'
+  address: 'DLvbw3sEcjBs8e6YGnb123456789012345'
+)
 ```
 
 ## Development
