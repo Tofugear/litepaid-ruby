@@ -24,6 +24,15 @@ module Litepaid
       def unconfirmed?
         @code == get_status(:unconfirmed)
       end
+
+      def invalid?
+        @code == 'AEC001' || @code == 'AEC008'
+      end
+
+      def cancelled?
+        @code == 'AEC003' || @code == 'AEC004'
+      end
+
     end
   end
 end
