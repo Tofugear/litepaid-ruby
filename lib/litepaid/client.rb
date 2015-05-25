@@ -121,16 +121,13 @@ module Litepaid
       begin
         response = JSON.parse RestClient.get( get_resource_url(resource_name), { params: options } ), symbolize_names: true
       rescue RestClient::ExceptionWithResponse => e
-        response = JSON.parse e.response, symbolize_names: true
+        raise Litepaid::Exception.new e.response, :unprocessable_entity, 500
       end
 
       data = response[:data]
       data[:code] = data.delete(:code) || data.delete(:error_code)
       data[:message] = data.delete(:description) || data.delete(:error_name)
-
-      if response[:result] == 'error'
-        raise Litepaid::Exception.new data[:message], :unprocessable_entity, data[:code]
-      end
+      data[:status] = response[:result]
 
       data
     end       
