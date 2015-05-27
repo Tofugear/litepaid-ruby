@@ -121,7 +121,9 @@ module Litepaid
       begin
         response = JSON.parse RestClient.get( get_resource_url(resource_name), { params: options } ), symbolize_names: true
       rescue RestClient::ExceptionWithResponse => e
-        raise Litepaid::Exception.new e.response, :unprocessable_entity, 500
+        raise Litepaid::Exception.new e.response, :unprocessable_entity, 422
+      rescue Exception => e
+        raise Litepaid::Exception.new e.message, :internal_server_error, 500
       end
 
       data = response[:data]
