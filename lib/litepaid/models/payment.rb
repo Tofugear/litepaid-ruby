@@ -33,6 +33,14 @@ module Litepaid
         @code == 'AEC003' || @code == 'AEC004'
       end
 
+      def currency
+        @received[:currency]
+      end
+
+      def amount
+        @received[:amount]
+      end
+
     end
   end
 end
